@@ -1,0 +1,92 @@
+@import url(https://fonts.googleapis.com/css?family=Pontano+Sans);
+/* Also exploring Karla, Barlow */
+
+html {
+  overflow-y: scroll;
+}
+body {
+  background-color: #FFFFFF;
+  height: 100%;
+  font-family: 'Pontano Sans', sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+}
+p, ul, ol {
+  color: #000000;
+  margin: 0px 0px 16px 0px;
+  font-size: 18px;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: #000000;
+}
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #000000;
+  margin: 1em 0;
+  padding: 0;
+}
+
+/******************************************************************************/
+/* Labels and Inputs */
+label {
+  position: absolute;
+  -webkit-transform: translateY(6px);
+          transform: translateY(6px);
+  left: 13px;
+  color: #FFFFFF;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+  font-size: 22px;
+}
+label.active {
+  -webkit-transform: translateY(50px);
+          transform: translateY(50px);
+  left: 2px;
+  font-size: 14px;
+}
+
+label.highlight {
+  color: #FFFFFF;
+}
+input, textarea {
+  font-size: 22px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 5px 10px;
+  background: none;
+  background-image: none;
+  border: 2px solid #282728;
+  color: #FFFFFF;
+  border-radius: 0;
+  -webkit-transition: border-color .25s ease, box-shadow .25s ease;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+input:focus, textarea:focus {
+  outline: 0;
+  border: 2px solid #FFFFFF;
+}
+
+/* Form background for login */
+.form {
+  background: rgba(75, 156, 211, 1);
+  padding: 40px;
+  max-width: 800px;
+  margin: 40px auto;
+  border-radius: 4px;
+  box-shadow: 7px 7px 10px 2px rgba(75, 156, 211, 0.8);
+}
+.field-wrap {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.login-title {
+  color: #23272B;
+  margin-bottom: 24px;
+}
