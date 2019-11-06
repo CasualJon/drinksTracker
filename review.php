@@ -40,28 +40,41 @@
       </div> <!-- /row -->
 
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <button type="button" class="btn btn-outline-dark btn-lg" onclick="addDrink()">
             <i class="fas fa-plus fa-2x"></i>
             <i class="fas fa-wine-glass-alt fa-2x"></i>
           </button>
+
+          <span class="push-right">
+            <button type="button" class="btn btn-outline-danger" onclick="whoopsies()" id="undo_button" hidden>
+              <i class="fas fa-undo"></i>
+            </button>
+          </span>
+        </div> <!-- /col-md-12 -->
+      </div> <!-- /row -->
+
+      <br>
+      <div class="row">
+        <div class="col-md-6">
+          <div id="current_week_barchart">
+            <span class="carolina-blue"><i class="fa fa-circle-notch fa-3x fa-spin"></i></span>
+          </div>
         </div> <!-- /col-md-6 -->
-        <div class="col-md-6 text-right">
-          <button type="button" class="btn btn-outline-danger" onclick="whoopsies()" id="undo_button" hidden>
-            <i class="fas fa-undo"></i>
-          </button>
+        <div class="col-md-6">
         </div> <!-- /col-md-6 -->
       </div> <!-- /row -->
 
-      <br><br>
+      <br><hr>
       <div class="row">
-        <div class="col-md-12">
-          <a href="./logout.php">Logout</a>
+        <div class="col-md-12 text-center">
+          <h4><a href="./logout.php">Logout</a></h4>
         </div> <!-- /col-md-12 -->
       </div> <!-- /row -->
     </div> <!-- /container -->
 
     <?php include './assets/js/universal_js.html'; ?>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="./assets/js/review.js"></script>
   </body>
 </html>
