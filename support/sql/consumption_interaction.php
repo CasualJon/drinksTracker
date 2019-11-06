@@ -17,13 +17,41 @@
       case 'fetch_within_range':
         $stmt = $mysqli->stmt_init();
         $stmt->prepare('SELECT cl_id, cl_datetime FROM consumption_log WHERE cl_person=? and cl_datetime >= ?');
-        $stmt->bind_param("is", $_SESSION['user_authorized'], $_POST['arguments'][0]);
+        $stmt->bind_param('is', $_SESSION['user_authorized'], $_POST['arguments'][0]);
         $stmt->execute();
         $resultSet = $stmt->get_result();
         if ($resultSet->num_rows > 0) {
           while ($row = $resultSet->fetch_assoc()) array_push($result, $row);
         }
         $resultSet->free();
+        $stmt->close();
+        break;
+
+      case 'fetch_historical_aggregates':
+        $target_start = new DateTime($_POST['arguments'][0], new DateTimeZone('America/Chicago'));
+        $one_week_interval = new DateInterval('P7D');
+        $target_end = new DateTime($_POST['arguments'][0], new DateTimeZone('America/Chicago'));
+        $target_end = $target_end->add($one_week_interval);
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare("SELECT COUNT(cl_id) AS cnt FROM consumption_log WHERE cl_person=? AND cl_datetime >= ? AND cl_datetime < ?");
+
+        for ($i = 0; $i < $_POST['arguments'][1]; $i++) {
+            $str_start = $target_start->format('Y-m-d');
+            $str_end = $target_end->format('Y-m-d');
+
+            $stmt->bind_param('iss', $_SESSION['user_authorized'], $str_start, $str_end);
+            $stmt->execute();
+            $resultSet = $stmt->get_result();
+            if ($resultSet->num_rows < 1) array_push($result, NULL);
+            else {
+              $row = $resultSet->fetch_assoc();
+              array_push($result, [$str_start, $str_end, $row['cnt']]);
+            }
+            $resultSet->free();
+
+            $target_start = $target_start->add($one_week_interval);
+            $target_end = $target_end->add($one_week_interval);
+        }
         $stmt->close();
         break;
 

@@ -1,12 +1,13 @@
 //JS helper file for review.php ------------------------------------
 //Converts a JS date object to a string that can be used for SQL comparisons on the server
-const getServerDateTimeStr = (dt) => {
+const getServerDateTimeStr = (dt, withTime) => {
   let out = '' + dt.getFullYear() + '-';
   let month = dt.getMonth() + 1;
   if (month >= 10) out += month + '-';
   else out += '0' + month + '-';
-  if (dt.getDate() >= 10) out += dt.getDate() + ' 00:00:00';
-  else out += '0' + dt.getDate() + ' 00:00:00';
+  if (dt.getDate() >= 10) out += dt.getDate();
+  else out += '0' + dt.getDate();
+  if (withTime) out += ' 00:00:00';
   return out;
 };
 
@@ -25,7 +26,6 @@ const getJSDateTime = (str) => {
 
 //Empty arrays to be used for reference by later functions in adding content to the DOM
 let weeksDrinks = new Array();
-let monthsDrinks = new Array();
 
 //Set d to today's date
 let d = new Date();
@@ -35,10 +35,14 @@ if (d.getDay() >= 5) lookback = (5 - d.getDay());
 else lookback = (2 + d.getDay());
 //Set the d as the the most recent Friday using the lookback and fetch server data
 d.setDate(d.getDate() - lookback);
-fetchCountsInRange(getServerDateTimeStr(d), true);
+fetchCountsInRange(getServerDateTimeStr(d, true));
+//With the core data rolling/complete, now let's get historicals
+let monthRange = new Date();
+monthRange.setDate(monthRange.getDate() - lookback - 28);
+fetchHistoricalAggregates(getServerDateTimeStr(monthRange, false), 4);
 
 
-function fetchCountsInRange(fetchDate, updateHdr) {
+function fetchCountsInRange(fetchDate) {
   jQuery.ajax({
     type:     'POST',
     url:      '../../support/sql/consumption_interaction.php',
@@ -49,18 +53,17 @@ function fetchCountsInRange(fetchDate, updateHdr) {
               },
     success:  function(obj) {
                 if (!('error' in obj)) {
+                  console.log(obj);
                   weeksDrinks = obj;
                   if (checkDatesForUndo()) $('#undo_button').prop("hidden", false);
-                  if (updateHdr) {
-                    //Adjust count and color (0-4=blue, 5-8=black, 9-12=orange, 13+=red)
-                    $('#drink_count').html(obj.length);
-                    if (obj.length <= 4) $('#drink_count').addClass('carolina-blue');
-                    else if (obj.length >= 13) $('#drink_count').addClass('wi-red');
-                    else if (obj.length >= 9) $('#drink_count').addClass('gc-orange');
-                    //Draw week's chart with data in hand
-                    google.charts.load('current', {packages: ['corechart']});
-                    google.charts.setOnLoadCallback(drawCurrentWeekBarchart);
-                  }
+                  //Adjust count and color (0-4=blue, 5-8=black, 9-12=orange, 13+=red)
+                  $('#drink_count').html(obj.length);
+                  if (obj.length <= 4) $('#drink_count').addClass('carolina-blue');
+                  else if (obj.length >= 13) $('#drink_count').addClass('wi-red');
+                  else if (obj.length >= 9) $('#drink_count').addClass('gc-orange');
+                  //Draw week's chart with data in hand
+                  google.charts.load('current', {packages: ['corechart']});
+                  google.charts.setOnLoadCallback(drawCurrentWeekBarchart);
                 }
                 else {
                   console.log(obj.error);
@@ -68,6 +71,26 @@ function fetchCountsInRange(fetchDate, updateHdr) {
     },
   });
 } //END fetchCountsInRange()
+function fetchHistoricalAggregates(fetchDate, numWeeks) {
+  jQuery.ajax({
+    type:     'POST',
+    url:      '../../support/sql/consumption_interaction.php',
+    dataType: 'json',
+    data:     {functionname: 'fetch_historical_aggregates', arguments: [fetchDate, numWeeks]},
+    error:    function(a, b, c) {
+                console.log('jQuery.ajax could not execute php file.');
+              },
+    success:  function(obj) {
+                if (!('error' in obj)) {
+                  console.log(obj);
+                }
+                else {
+                  console.log(obj.error);
+                }
+    },
+  });
+  console.log(fetchDate); console.log(numWeeks);
+} //END fetchHistoricalAggregates()
 function addDrink() {
   jQuery.ajax({
     type:     'POST',
