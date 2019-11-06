@@ -1,0 +1,3 @@
+# Block repeat offenders
+Deny from 211.56.145.140
+Deny from 5.188.210.101
