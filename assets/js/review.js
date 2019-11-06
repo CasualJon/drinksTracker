@@ -34,7 +34,7 @@ function fetchCountsInRange(fetchDate, updateHdr) {
                 if (!('error' in obj)) {
                   console.log(obj);
                   drinksArr = obj;
-                  checkDatesForUndo();
+                  if (checkDatesForUndo()) $('#undo_button').prop("hidden", false);
                   if (updateHdr) {
                     $('#drink_count').html(obj.length);
                     if (obj.length <= 4) $('#drink_count').addClass('carolina-blue');
@@ -87,4 +87,10 @@ function whoopsies() {
                 }
     },
   });
+}
+function checkDatesForUndo() {
+  let mostRecent = new Date(drinksArr[drinksArr.length - 1].cl_datetime);
+  let today = new Date();
+  if (mostRecent.getDate() === today.getDate() && mostRecent.getMonth() === today.getMonth()) return true;
+  else return false;
 }
