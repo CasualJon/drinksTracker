@@ -1,4 +1,5 @@
-//JS helper file for review.php
+//JS helper file for review.php ------------------------------------
+//Converts a JS date object to a string that can be used for SQL comparisons on the server
 const getServerDateTimeStr = (dt) => {
   let out = '' + dt.getFullYear() + '-';
   let month = dt.getMonth() + 1;
@@ -8,31 +9,32 @@ const getServerDateTimeStr = (dt) => {
   else out += '0' + dt.getDate() + ' 00:00:00';
   return out;
 };
+
+//Converts a string to a JS Date object because fuck safari
 const getJSDateTime = (str) => {
   let dt;
-  if (!fuckingSafari) {
-    dt = str;
-  }
+  if (!fuckingSafari) dt = str;
   else {
-    //Format for reference in Safari
-    //2018-02-06T20:00:00.000-06:00
+    //Format for reference in Safari: 2018-02-06T20:00:00.000-06:00
     let tmp = str.split(' ');
     dt = tmp[0];
-    dt += 'T' + tmp[1] + '.000-06:00';
+    dt += 'T' + tmp[1] + '.000-06:00'; //-06 for Central time
   }
   return new Date(dt);
 };
+
+//Empty arrays to be used for reference by later functions in adding content to the DOM
 let weeksDrinks = new Array();
 let monthsDrinks = new Array();
 
 //Set d to today's date
 let d = new Date();
-//Weekly counts should start on Friday
+//Weekly counts should start on Friday, so configure lookback
 let lookback;
 if (d.getDay() >= 5) lookback = (5 - d.getDay());
 else lookback = (2 + d.getDay());
+//Set the d as the the most recent Friday using the lookback and fetch server data
 d.setDate(d.getDate() - lookback);
-//Call the fetch function
 fetchCountsInRange(getServerDateTimeStr(d), true);
 
 
@@ -47,7 +49,6 @@ function fetchCountsInRange(fetchDate, updateHdr) {
               },
     success:  function(obj) {
                 if (!('error' in obj)) {
-                  console.log(obj);
                   weeksDrinks = obj;
                   if (checkDatesForUndo()) $('#undo_button').prop("hidden", false);
                   if (updateHdr) {
