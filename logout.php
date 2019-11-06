@@ -3,10 +3,10 @@
   if (!isset($_SESSION)) session_start();
   session_unset();
   session_destroy();
-  if (isset($_COOKIE['drinks_trakcer_cookie'])) {
-    unset($_COOKIE['drinks_trakcer_cookie']);
+  if (isset($_COOKIE['drinks_tracker'])) {
+    unset($_COOKIE['drinks_tracker']);
   }
-  setcookie("drinks_trakcer_cookie", "", time() - 3600, NULL, NULL, TRUE, TRUE);
+  setcookie("drinks_tracker", "", time() - 3600, NULL, NULL, TRUE, TRUE);
 ?>
 
 <!DOCTYPE html>
