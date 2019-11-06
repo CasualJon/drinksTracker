@@ -95,11 +95,14 @@ input:focus, textarea:focus {
 /******************************************************************************/
 /* Span changes */
 span.wi-red {
-  color: #C5050C;
+  color: #FF2500;
 }
 span.gc-orange {
-  color: #FF6600;
+  color: #FFA500;
 }
 span.carolina-blue {
   color: #4B9CD3;
+}
+span.push-right {
+  float: right;
 }
