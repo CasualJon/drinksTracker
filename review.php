@@ -4,6 +4,15 @@
     http_response_code(403);
     exit;
   }
+
+  //Fetch current weekly count info as the default
+  require './support/connection.php';
+  //Set a cookie to help later logins
+  if (!isset($_COOKIE['drinks_tracker'])) {
+    //604800 = 1 week
+    setcookie('drinks_tracker', $_SESSION['user_authorized'].'|'.$_SESSION['user_hash'], time()+604800, NULL, NULL, TRUE, TRUE);
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -21,9 +30,36 @@
     <title>Weekly Drinks Tracker</title>
   </head>
   <body>
-    <?php echo "REVIEW PAGE!<br>"; var_dump($_SESSION); ?>
-    <br>
-    <a href="./logout.php">Logout</a>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <?php echo "REVIEW PAGE!<br>"; var_dump($_SESSION); ?>
+          <h1><?php echo $_SESSION['user_name']; ?></h1>
+          <h3>Count for current week: <span id="drink_count"></span></h3>
+          <hr>
+        </div> <!-- /col-md-12 -->
+      </div> <!-- /row -->
+
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-outline-dark btn-lg" onclick="addDrink()">
+            <i class="fas fa-plus fa-2x"></i>
+            <i class="fas fa-wine-glass-alt fa-2x"></i>
+          </button>
+        </div> <!-- /col-md-6 -->
+        <div class="col-md-6 text-right">
+          <button type="button" class="btn btn-outline-danger" onclick="whoopsies()">
+            <i class="fas fa-undo"></i>
+          </button>
+        </div> <!-- /col-md-6 -->
+      </div> <!-- /row -->
+          <br>
+          <a href="./logout.php">Logout</a>
+        </div> <!-- /col-md-12 -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+
     <?php include './assets/js/universal_js.html'; ?>
+    <script type="text/javascript" src="./assets/js/review.js"></script>
   </body>
 </html>
