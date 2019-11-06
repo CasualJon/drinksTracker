@@ -33,7 +33,6 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <?php echo "REVIEW PAGE!<br>"; var_dump($_SESSION); ?>
           <h1><?php echo $_SESSION['user_name']; ?></h1>
           <h3>Count for current week: <span id="drink_count"></span></h3>
           <hr>
@@ -48,12 +47,15 @@
           </button>
         </div> <!-- /col-md-6 -->
         <div class="col-md-6 text-right">
-          <button type="button" class="btn btn-outline-danger" onclick="whoopsies()">
+          <button type="button" class="btn btn-outline-danger" onclick="whoopsies()" id="undo_button" hidden>
             <i class="fas fa-undo"></i>
           </button>
         </div> <!-- /col-md-6 -->
       </div> <!-- /row -->
-          <br>
+
+      <br><br>
+      <div class="row">
+        <div class="col-md-12">
           <a href="./logout.php">Logout</a>
         </div> <!-- /col-md-12 -->
       </div> <!-- /row -->

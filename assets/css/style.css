@@ -24,10 +24,11 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #000000;
+  border-top: 1px solid #555555;
   margin: 1em 0;
   padding: 0;
 }
+
 
 /******************************************************************************/
 /* Labels and Inputs */
@@ -85,8 +86,20 @@ input:focus, textarea:focus {
   position: relative;
   margin-bottom: 40px;
 }
-
 .login-title {
   color: #23272B;
   margin-bottom: 24px;
+}
+
+
+/******************************************************************************/
+/* Span changes */
+span.wi-red {
+  color: #C5050C;
+}
+span.gc-orange {
+  color: #FF6600;
+}
+span.carolina-blue {
+  color: #4B9CD3;
 }

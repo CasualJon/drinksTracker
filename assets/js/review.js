@@ -13,12 +13,13 @@ let drinksArr = new Array();
 //Set d to today's date
 let d = new Date();
 //Weekly counts should start on Friday
-let lookback = 2;
+let lookback;
 if (d.getDay() >= 5) lookback = (5 - d.getDay());
 else lookback = (2 + d.getDay());
 d.setDate(d.getDate() - lookback);
 //Call the fetch function
 fetchCountsInRange(getDateTimeStr(d), true);
+
 
 function fetchCountsInRange(fetchDate, updateHdr) {
   jQuery.ajax({
@@ -33,7 +34,13 @@ function fetchCountsInRange(fetchDate, updateHdr) {
                 if (!('error' in obj)) {
                   console.log(obj);
                   drinksArr = obj;
-                  if (updateHdr) $('#drink_count').html(obj.length);
+                  checkDatesForUndo();
+                  if (updateHdr) {
+                    $('#drink_count').html(obj.length);
+                    if (obj.length <= 4) $('#drink_count').addClass('carolina-blue');
+                    else if (obj.length >= 12) $('#drink_count').addClass('wi-red');
+                    else if (obj.length >= 8) $('#drink_count').addClass('gc-orange');
+                  }
                 }
                 else {
                   console.log(obj.error);
@@ -41,7 +48,6 @@ function fetchCountsInRange(fetchDate, updateHdr) {
     },
   });
 }
-
 function addDrink() {
   jQuery.ajax({
     type:     'POST',
@@ -54,7 +60,7 @@ function addDrink() {
     success:  function(obj) {
                 if ('outcome' in obj) {
                   console.log(obj);
-                  if (obj.outcome == true) window.location.reload();
+                  if (obj.outcome) window.location.reload();
                 }
                 else {
                   console.log(obj);
@@ -74,7 +80,7 @@ function whoopsies() {
     success:  function(obj) {
                 if ('outcome' in obj) {
                   console.log(obj);
-                  if (obj.outcome == true) window.location.reload();
+                  if (obj.outcome) window.location.reload();
                 }
                 else {
                   console.log(obj);
