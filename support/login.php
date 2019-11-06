@@ -2,9 +2,10 @@
   if (!isset($_SESSION)) session_start();
   require __DIR__.'/connection.php';
 
+  $id = trim($_POST['login']);
   $stmt = $mysqli->stmt_init();
   $stmt->prepare("SELECT * FROM person_data WHERE pd_name=?");
-  $stmt->bind_param("s", $_POST['login']);
+  $stmt->bind_param("s", $id);
   $stmt->execute();
   $resultSet = $stmt->get_result();
   $stmt->close();

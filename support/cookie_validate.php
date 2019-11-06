@@ -5,21 +5,21 @@
   }
 
   if (!isset($_SESSION)) session_start();
-  require './connection.php';
+  require __DIR__.'/connection.php';
 
   $stmt = $mysqli->stmt_init();
   $stmt->prepare("SELECT * FROM person_data WHERE pd_id=? AND pd_hash=?");
-  $piece_A = substr($_COOKIE['drinks_trakcer_cookie'], 0, strpos($_COOKIE['drinks_trakcer_cookie'], "|"));
-  $piece_B = substr($_COOKIE['drinks_trakcer_cookie'], strpos($_COOKIE['drinks_trakcer_cookie'], "|") + 1);
-  $stmt->bind_parram("is", $piece_A, $piece_B);
+  $piece_A = substr($_COOKIE['drinks_tracker'], 0, strpos($_COOKIE['drinks_tracker'], "|"));
+  $piece_B = substr($_COOKIE['drinks_tracker'], strpos($_COOKIE['drinks_tracker'], "|") + 1);
+  $stmt->bind_param("is", $piece_A, $piece_B);
   $stmt->execute();
   $resultSet = $stmt->get_result();
   $stmt->close();
 
   if ($resultSet->num_rows < 1) {
     $resultSet->free();
-    unset($_COOKIE['drinks_trakcer_cookie']);
-    setcookie("drinks_trakcer_cookie", "", time()-3600, NULL, NULL, TRUE, TRUE);
+    unset($_COOKIE['drinks_tracker']);
+    setcookie("drinks_tracker", "", time()-3600, NULL, NULL, TRUE, TRUE);
     exit;
   }
   else {

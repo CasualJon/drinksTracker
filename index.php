@@ -11,7 +11,7 @@
     header('location: review.php');
     exit;
   }
-  elseif (isset($_COOKIE['drinks_trakcer_cookie'])) {
+  elseif (isset($_COOKIE['drinks_tracker'])) {
     require './support/cookie_validate.php';
     if (isset($_SESSION['user_authorized'])) {
       header('location: review.php');
