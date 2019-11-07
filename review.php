@@ -61,7 +61,7 @@
             <span class="carolina-blue"><i class="fa fa-circle-notch fa-3x fa-spin"></i></span>
           </div>
         </div> <!-- /col-md-6 -->
-        <div class="col-md-6">
+        <div class="col-md-6 text-center">
           <div id="previous_month_data">
             <span class="carolina-blue"><i class="fa fa-circle-notch fa-3x fa-spin"></i></span>
           </div>

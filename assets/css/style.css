@@ -106,3 +106,15 @@ span.carolina-blue {
 span.push-right {
   float: right;
 }
+span.sizeOneTransp {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 1rem;
+}
+span.iconGreen {
+  color: #00CC00;
+  margin-left: 8px;
+}
+span.iconRed {
+  color: #FF2500;
+  margin-left: 8px;
+}

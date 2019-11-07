@@ -24,6 +24,14 @@ const getJSDateTime = (str) => {
   return new Date(dt);
 };
 
+//Enumeration object for defining allowed # per week and color thresholds
+const limits = {
+  MAX: 15,
+  LOW: 4,
+  MED: 9,
+  HIGH: 13
+};
+
 //Empty arrays to be used for reference by later functions in adding content to the DOM
 let weeksDrinks = new Array();
 
@@ -58,9 +66,9 @@ function fetchCountsInRange(fetchDate) {
                   if (checkDatesForUndo()) $('#undo_button').prop("hidden", false);
                   //Adjust count and color (0-4=blue, 5-8=black, 9-12=orange, 13+=red)
                   $('#drink_count').html(obj.length);
-                  if (obj.length <= 4) $('#drink_count').addClass('carolina-blue');
-                  else if (obj.length >= 13) $('#drink_count').addClass('wi-red');
-                  else if (obj.length >= 9) $('#drink_count').addClass('gc-orange');
+                  if (obj.length <= limits.LOW) $('#drink_count').addClass('carolina-blue');
+                  else if (obj.length >= limits.HIGH) $('#drink_count').addClass('wi-red');
+                  else if (obj.length >= limits.MED) $('#drink_count').addClass('gc-orange');
                   //Draw week's chart with data in hand
                   google.charts.load('current', {packages: ['corechart']});
                   google.charts.setOnLoadCallback(drawCurrentWeekBarchart);
@@ -83,6 +91,7 @@ function fetchHistoricalAggregates(fetchDate, numWeeks) {
     success:  function(obj) {
                 if (!('error' in obj)) {
                   console.log(obj);
+                  writeHistoricalAggregates(obj, numWeeks);
                 }
                 else {
                   console.log(obj.error);
@@ -163,7 +172,7 @@ function drawCurrentWeekBarchart() {
       ['Thu',  dailyCounts[6]]
   ]);
   let weeklyOptions = {
-    title : "Weekly Chart",
+    title : 'Weekly Chart',
     titleTextStyle: {
       fontName: 'Nunito Sans',
       fontSize: 18,
@@ -176,3 +185,14 @@ function drawCurrentWeekBarchart() {
   let weeklyChart = new google.visualization.ColumnChart(drawSpace);
   weeklyChart.draw(weeklyData, weeklyOptions);
 } //END drawCurrentWeekBarchart()
+function writeHistoricalAggregates(arr, numWeeks) {
+  let out = "";
+  for (let i = numWeeks-1; i >= 0; i--) {
+    out += '<h3><span class="sizeOneTransp">' + arr[i][0].substring(5) + ' to ' + arr[i][1].substring(5) + ': </span>';
+    out += arr[i][2];
+    if (arr[i][2] <= limits.MAX) out += '<span class="iconGreen"><i class="far fa-check-circle"></i></span>';
+    else out += '<span class="iconRed"><i class="far fa-times-circle"></i></span>';
+    out += '</h3>';
+  }
+  $('#previous_month_data').html(out);
+} //END writeHistoricalAggregates()
