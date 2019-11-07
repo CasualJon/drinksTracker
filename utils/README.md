@@ -11,3 +11,5 @@ Make the Rules Permanent: Debian-based Distributions
 
 To run the scripts (firewall, firewall-down, firewall-reload), remember to run as super user
 and to change the script itself to be executable (chmod +x firewall*)
+
+NB: by default, these scripts want to be stored at /etc/firewallsetup
