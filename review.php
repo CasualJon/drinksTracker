@@ -1,7 +1,7 @@
 <?php
   if (!isset($_SESSION)) session_start();
   if (!isset($_SESSION['user_authorized'])) {
-    http_response_code(403);
+    header('location: index.php');
     exit;
   }
 
