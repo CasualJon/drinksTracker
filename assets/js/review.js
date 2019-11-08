@@ -208,4 +208,69 @@ function writeHistoricalAggregates(arr, numWeeks) {
 } //END writeHistoricalAggregates()
 function launchUserSettings() {
   console.log("launchUserSettings clicked");
+  $('#maxWeekly').val(limits.MAX);
+  $('#blueWeekly').val(limits.LOW);
+  $('#orangeWeekly').val(limits.MED);
+  $('#redWeekly').val(limits.HIGH);
 } //END launchUserSettings()
+function validatePersonalizations() {
+  let errMsg = '';
+  //If all are empty
+  if (!$('#maxWeekly').val() && !$('#blueWeekly').val() && !$('#orangeWeekly').val() && !$('#redWeekly').val()) {
+    //pass - write all nulls to the database
+  }
+  //If all are populated
+  else if ($('#maxWeekly').val() && $('#blueWeekly').val() && $('#orangeWeekly').val() && $('#redWeekly').val()) {
+    let max = parseInt($('#maxWeekly').val().trim());
+    let blue = parseInt($('#blueWeekly').val().trim());
+    let orange = parseInt($('#orangeWeekly').val().trim());
+    let red = parseInt($('#redWeekly').val().trim());
+
+    if (isNaN(max) || isNaN(blue) || isNaN(orange) || isNaN(red)) {
+      errMsg += 'Values entered must be numbers\n';
+    }
+    else {
+      //Check to ensure that the numbers are in appropriate sequential order
+      let issueFound = false;
+      if (max <= blue || max <= orange || max <= red) issueFound = true;
+      if (red <= blue || red <= orange) issueFound = true;
+      if (orange <= blue) issueFound = true;
+      if (issueFound) errMsg += "Thresholds and Max/Week must be sequential: Blue < Orange < Red < Max\n";
+    }
+  }
+  //If only some populated
+  else {
+    errMsg += 'All values must be empty (to use defaults), or all must be populated with your values:\n\n';
+    if (!$('#maxWeekly').val()) errMsg += '- Max/Week is missing\n';
+    if (!$('#blueWeekly').val()) errMsg += '- Blue threshold is missing\n';
+    if (!$('#orangeWeekly').val()) errMsg += '- Orange threshold is missing\n';
+    if (!$('#redWeekly').val()) errMsg += '- Red threshold is missing\n';
+  }
+
+  if (errMsg) {
+    alert(errMsg);
+    return;
+  }
+
+  let args = [$('#blueWeekly').val(), $('#orangeWeekly').val(), $('#redWeekly').val(), $('#maxWeekly').val()];
+  jQuery.ajax({
+    type:     'POST',
+    url:      '../../support/sql/consumption_interaction.php',
+    dataType: 'json',
+    data:     {functionname: 'update_personal_limits', arguments: args},
+    error:    function(a, b, c) {
+                console.log('jQuery.ajax could not execute php file.');
+              },
+    success:  function(obj) {
+                if (!('error' in obj)) {
+                  if (obj.outcome) {
+                    $('#userSettingsModal').modal('hide');
+                    window.location.reload();
+                  }
+                }
+                else {
+                  console.log(obj.error);
+                }
+    },
+  });
+} //END validatePersonalizations()

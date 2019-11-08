@@ -70,6 +70,22 @@
         $stmt->close();
         break;
 
+      case 'update_personal_limits':
+        $blue = NULL; $orange = NULL; $red = NULL; $max = NULL;
+        if (!empty($_POST['arguments'][0])) {
+          $blue = $_POST['arguments'][0];
+          $orange = $_POST['arguments'][1];
+          $red = $_POST['arguments'][2];
+          $max = $_POST['arguments'][3];
+        }
+
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare('UPDATE person_data SET pd_low=?, pd_med=?, pd_high=?, pd_max=? WHERE pd_id=?');
+        $stmt->bind_param('iiiii', $blue, $orange, $red, $max, $_SESSION['user_authorized']);
+        $result['outcome'] = $stmt->execute();
+        $stmt->close();
+        break;
+
       case 'add_drink':
         $now =  date('Y-m-d H:i:s');
         $stmt = $mysqli->stmt_init();

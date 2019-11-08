@@ -72,6 +72,9 @@ input:focus, textarea:focus {
   outline: 0;
   border: 2px solid #FFFFFF;
 }
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
 
 /* Form background for login */
 .form {
