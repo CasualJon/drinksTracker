@@ -1,0 +1,17 @@
+# .local file to override for jail.conf
+[DEFULT]
+bantime = 3600
+maxretry = 4
+
+# On by default, but declaring specifically here
+[sshd]
+enabled = true
+
+# Including, but likely not to catch anything because of the rate-limiting in iptables
+[sshd-ddos]
+enabled = true
+
+# Sofa king tired of script kiddies
+[apache-noscript]
+enabled = true
+maxretry = 2

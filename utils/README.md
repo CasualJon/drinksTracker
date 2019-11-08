@@ -1,4 +1,5 @@
 
+# Firewall Setup - iptables
 Fast Firewall Setup, from ChrisTitusTech
 (https://github.com/ChrisTitusTech/firewallsetup)
 (https://www.youtube.com/watch?v=qPEA6J9pjG8)
@@ -13,3 +14,9 @@ To run the scripts (firewall, firewall-down, firewall-reload), remember to run a
 and to change the script itself to be executable (chmod +x firewall*)
 
 NB: by default, these scripts want to be stored at /etc/firewallsetup
+
+# Fail2ban Setup
+sudo apt-get install fail2ban
+The jail.local file contained in this directory is intended to enable additional filters
+not included as part of the default (which is sshd only).
+It should be placed in /etc/fail2ban and the service restarted
