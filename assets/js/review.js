@@ -64,14 +64,13 @@ function fetchCountsInRange(fetchDate) {
                 if (!('error' in obj)) {
                   let tmp = obj[obj.length - 1];
                   obj.splice(obj.length - 1, 1);
-                  if (tmp.max !== null) {
+                  if (tmp.pd_max !== null) {
                     limits.MAX = tmp.pd_max;
                     limits.LOW = tmp.pd_low;
                     limits.MED = tmp.pd_med;
                     limits.HIGH = tmp.pd_high;
                   }
-
-                  console.log(obj);
+                  console.log({limits, obj});
                   weeksDrinks = obj;
                   if (checkDatesForUndo()) $('#undo_button').prop("hidden", false);
                   //Adjust count and color (0-4=blue, 5-8=black, 9-12=orange, 13+=red)
@@ -108,7 +107,6 @@ function fetchHistoricalAggregates(fetchDate, numWeeks) {
                 }
     },
   });
-  console.log(fetchDate); console.log(numWeeks);
 } //END fetchHistoricalAggregates()
 function addDrink() {
   jQuery.ajax({
