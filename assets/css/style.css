@@ -118,3 +118,15 @@ span.iconRed {
   color: #FF2500;
   margin-left: 8px;
 }
+
+/* This configuration removes the forced outline Chrome & Safari were presenting */
+[type="reset"], [type="submit"], button, html [type="button"] {
+  -webkit-appearance: none;
+}
+button.userSettings {
+  background-color: transparent;
+  border-color: transparent;
+  font-size: 18px;
+  margin-top: 6px;
+  float: right;
+}

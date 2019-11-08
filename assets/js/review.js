@@ -25,7 +25,8 @@ const getJSDateTime = (str) => {
 };
 
 //Enumeration object for defining allowed # per week and color thresholds
-const limits = {
+//Set here in case null, updated later via database
+var limits = {
   MAX: 15,
   LOW: 4,
   MED: 9,
@@ -61,6 +62,15 @@ function fetchCountsInRange(fetchDate) {
               },
     success:  function(obj) {
                 if (!('error' in obj)) {
+                  let tmp = obj[obj.length - 1];
+                  obj.splice(obj.length - 1, 1);
+                  if (tmp.max !== null) {
+                    limits.MAX = tmp.pd_max;
+                    limits.LOW = tmp.pd_low;
+                    limits.MED = tmp.pd_med;
+                    limits.HIGH = tmp.pd_high;
+                  }
+
                   console.log(obj);
                   weeksDrinks = obj;
                   if (checkDatesForUndo()) $('#undo_button').prop("hidden", false);
@@ -141,6 +151,8 @@ function whoopsies() {
   });
 } //END whoopsies()
 function checkDatesForUndo() {
+  if (weeksDrinks.length === 0) return false;
+
   let mostRecent = getJSDateTime(weeksDrinks[weeksDrinks.length - 1].cl_datetime);
   let today = new Date();
   if (mostRecent.getDate() === today.getDate() && mostRecent.getMonth() === today.getMonth()) return true;
@@ -196,3 +208,6 @@ function writeHistoricalAggregates(arr, numWeeks) {
   }
   $('#previous_month_data').html(out);
 } //END writeHistoricalAggregates()
+function launchUserSettings() {
+  console.log("launchUserSettings clicked");
+} //END launchUserSettings()

@@ -33,7 +33,10 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h1><?php echo $_SESSION['user_name']; ?></h1>
+          <h1>
+            <?php echo $_SESSION['user_name']; ?>
+            <button class="userSettings" type="button" onclick="launchUserSettings()"><i class="fas fa-user-cog"></i></button>
+          </h1>
           <h3>Count for current week: <span id="drink_count"></span></h3>
           <hr>
         </div> <!-- /col-md-12 -->

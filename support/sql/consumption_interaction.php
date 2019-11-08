@@ -24,6 +24,21 @@
           while ($row = $resultSet->fetch_assoc()) array_push($result, $row);
         }
         $resultSet->free();
+
+        //Return personal data preferences as the final element
+        $stmt->prepare("SELECT pd_low, pd_med, pd_high, pd_max FROM person_data WHERE pd_id=?");
+        $stmt->bind_param("i", $_SESSION['user_authorized']);
+        $stmt->execute();
+        $resultSet = $stmt->get_result();
+        if ($resultSet->num_rows < 1) {
+          $limits['pd_low'] = NULL;
+          $limits['pd_med'] = NULL;
+          $limits['pd_high'] = NULL;
+          $limits['pd_max'] = NULL;
+        }
+        else $limits = $resultSet->fetch_assoc();
+        $resultSet->free();
+        array_push($result, $limits);
         $stmt->close();
         break;
 
