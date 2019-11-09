@@ -40,7 +40,7 @@ let weeksDrinks = new Array();
 let d = new Date();
 //Weekly counts should start on Friday, so configure lookback
 let lookback;
-if (d.getDay() >= 5) lookback = (5 - d.getDay());
+if (d.getDay() >= 5) lookback = (d.getDay() - 5);
 else lookback = (2 + d.getDay());
 //Set the d as the the most recent Friday using the lookback and fetch server data
 d.setDate(d.getDate() - lookback);
@@ -49,7 +49,6 @@ fetchCountsInRange(getServerDateTimeStr(d, true));
 let monthRange = new Date();
 monthRange.setDate(monthRange.getDate() - lookback - 28);
 fetchHistoricalAggregates(getServerDateTimeStr(monthRange, false), 4);
-
 
 function fetchCountsInRange(fetchDate) {
   jQuery.ajax({
