@@ -24,8 +24,7 @@ const getJSDateTime = (str) => {
   return new Date(dt);
 };
 
-//Enumeration object for defining allowed # per week and color thresholds
-//Set here in case null, updated later via database
+//Enumeration object for defining allowed # per week and color thresholds; defaults set here, updated later via database
 var limits = {
   MAX: 15,
   LOW: 4,
@@ -35,6 +34,31 @@ var limits = {
 
 //Empty arrays to be used for reference by later functions in adding content to the DOM
 let weeksDrinks = new Array();
+
+//Enable date picker on historical drink additon modal
+$('#dateToAddDrink').datepicker({format: "yyyy-mm-dd"});
+
+//Variable and code for distinguishing between long and short press of the add drink button
+var timerStart = null;
+var timerEnd = null;
+var downWithin = false;
+$('#addDrinkBtn').mousedown(function() {
+  let startDateObj = new Date();
+  timerStart = startDateObj.getTime();
+  downWithin = true;
+  return false;
+});
+$('#addDrinkBtn').mouseup(function() {
+  if (!downWithin) return false;
+  else downWithin = false;
+
+  let endDateObj = new Date();
+  let timerEnd = endDateObj.getTime();
+
+  console.log({s: timerStart, e: timerEnd, diff: (timerEnd - timerStart)});
+  if (timerEnd - timerStart < 900) addDrink();
+  else launchHistoricalModal();
+});
 
 //Set d to today's date
 let d = new Date();
@@ -127,6 +151,15 @@ function addDrink() {
     },
   });
 } //END addDrink()
+function launchHistoricalModal() {
+  //Set yesterday to today's date and back it up one
+  let yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  //Date is yesterday
+  //Number of drinks is one
+  //Don't forget to set the gijgo on the date field above
+  $('#historicalAddModal').modal('show');
+} //END launchHistoricalModal()
 function whoopsies() {
   jQuery.ajax({
     type:     'POST',
@@ -273,3 +306,6 @@ function validatePersonalizations() {
     },
   });
 } //END validatePersonalizations()
+function validateHistoricalAdd() {
+  console.log("validateHistoricalAdd() called");
+} //END validateHistoricalAdd()

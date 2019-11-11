@@ -44,7 +44,7 @@
 
       <div class="row">
         <div class="col-md-12">
-          <button type="button" class="btn btn-outline-dark btn-lg" onclick="addDrink()">
+          <button type="button" class="btn btn-outline-dark btn-lg" id="addDrinkBtn">
             <i class="fas fa-plus fa-2x"></i>
             <i class="fas fa-wine-glass-alt fa-2x"></i>
           </button>
@@ -79,65 +79,107 @@
       </div> <!-- /row -->
     </div> <!-- /container -->
 
-    <!-- Add/Edit Contract Modal -->
-<div class="modal fade" id="userSettingsModal" tabindex="-1" role="dialog" aria-labelledby="userSettingsModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="userSettingsModalLabel"><?php echo $_SESSION['user_name']; ?>'s Personal Setttings</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <!-- Blue threshold -->
-            <h5 class="modal-title"><span class="carolina-blue">Blue</span> threshold <=</h5>
-            <div class="row">
-              <div class="col-md-12">
-                <input type="number" class="form-control" id="blueWeekly">
-              </div> <!-- /column -->
-            </div> <!-- /row -->
+    <!-- Edit Personal Settings Modal -->
+    <div class="modal fade" id="userSettingsModal" tabindex="-1" role="dialog" aria-labelledby="userSettingsModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="userSettingsModalLabel"><?php echo $_SESSION['user_name']; ?>'s Personal Setttings</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <!-- Blue threshold -->
+                <h5 class="modal-title"><span class="carolina-blue">Blue</span> threshold <=</h5>
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="number" class="form-control" id="blueWeekly">
+                  </div> <!-- /column -->
+                </div> <!-- /row -->
 
-            <!-- Orange threshold -->
-            <h5 class="modal-title"><span class="gc-orange">Orange</span> threshold >=</h5>
-            <div class="row">
-              <div class="col-md-12">
-                <input type="number" class="form-control" id="orangeWeekly">
-              </div> <!-- /column -->
-            </div> <!-- /row -->
+                <!-- Orange threshold -->
+                <h5 class="modal-title"><span class="gc-orange">Orange</span> threshold >=</h5>
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="number" class="form-control" id="orangeWeekly">
+                  </div> <!-- /column -->
+                </div> <!-- /row -->
 
-            <!-- Red threshold -->
-            <h5 class="modal-title"><span class="wi-red">Red</span> threshold >=</h5>
-            <div class="row">
-              <div class="col-md-12">
-                <input type="number" class="form-control" id="redWeekly">
-              </div> <!-- /column -->
-            </div> <!-- /row -->
-            <br>
+                <!-- Red threshold -->
+                <h5 class="modal-title"><span class="wi-red">Red</span> threshold >=</h5>
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="number" class="form-control" id="redWeekly">
+                  </div> <!-- /column -->
+                </div> <!-- /row -->
+                <br>
 
-            <!-- Max Per Week -->
-            <h5 class="modal-title">Max/Week</h5>
-            <div class="row">
-              <div class="col-md-12">
-                <input type="number" class="form-control" id="maxWeekly">
-              </div> <!-- /column -->
-            </div> <!-- /row -->
+                <!-- Max Per Week -->
+                <h5 class="modal-title">Max/Week</h5>
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="number" class="form-control" id="maxWeekly">
+                  </div> <!-- /column -->
+                </div> <!-- /row -->
 
-          </div> <!-- /form-group -->
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-light" data-dismiss="modal">Exit</button>
-        <button type="button" class="btn btn-primary" onclick="validatePersonalizations()">Save</button>
+              </div> <!-- /form-group -->
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-dismiss="modal">Exit</button>
+            <button type="button" class="btn btn-primary" onclick="validatePersonalizations()">Save</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
+    <!-- Historical Add Modal -->
+    <div class="modal fade" id="historicalAddModal" tabindex="-1" role="dialog" aria-labelledby="historicalAddModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="historicalAddModalLabel">Add past drinks</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <!-- How many drinks -->
+                <h5 class="modal-title">How many drinks?</h5>
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="number" class="form-control" id="numberOfDrinks">
+                  </div> <!-- /column -->
+                </div> <!-- /row -->
+                <br>
+
+                <!-- What date -->
+                <h5 class="modal-title">Date of drink(s)?</h5>
+                <div class="row">
+                  <div class="col-md-12">
+                    <input id="dateToAddDrink" width="184" placeholder="yyyy-mm-dd">
+                  </div> <!-- /column -->
+                </div> <!-- /row -->
+
+              </div> <!-- /form-group -->
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-dismiss="modal">Exit</button>
+            <button type="button" class="btn btn-primary" onclick="validateHistoricalAdd()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <?php include './assets/js/universal_js.html'; ?>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js"></script>
     <script type="text/javascript" src="./assets/js/review.js"></script>
   </body>
 </html>
