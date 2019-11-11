@@ -42,6 +42,7 @@ $('#dateToAddDrink').datepicker({format: "yyyy-mm-dd"});
 var timerStart = null;
 var timerEnd = null;
 var downWithin = false;
+//Mousedown and mouseup for computers
 $('#addDrinkBtn').mousedown(function() {
   let startDateObj = new Date();
   timerStart = startDateObj.getTime();
@@ -56,6 +57,23 @@ $('#addDrinkBtn').mouseup(function() {
   let timerEnd = endDateObj.getTime();
 
   console.log({s: timerStart, e: timerEnd, diff: (timerEnd - timerStart)});
+  if (timerEnd - timerStart < 900) addDrink();
+  else launchHistoricalModal();
+});
+//Touchstart and touchend for iOS/mobile
+$('#addDrinkBtn').on('touchstart', function() {
+  let startDateObj = new Date();
+  timerStart = startDateObj.getTime();
+  downWithin = true;
+  return false;
+});
+$('#addDrinkBtn').on('touchend', function() {
+  if (!downWithin) return false;
+  else downWithin = false;
+
+  let endDateObj = new Date();
+  let timerEnd = endDateObj.getTime();
+
   if (timerEnd - timerStart < 900) addDrink();
   else launchHistoricalModal();
 });
@@ -152,12 +170,20 @@ function addDrink() {
   });
 } //END addDrink()
 function launchHistoricalModal() {
+  //Default number of drinks is one
+  $('#numberOfDrinks').val('1');
   //Set yesterday to today's date and back it up one
   let yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  //Date is yesterday
-  //Number of drinks is one
-  //Don't forget to set the gijgo on the date field above
+  let yStr = yesterday.getFullYear() + '-';
+  let month = yesterday.getMonth() + 1;
+  if (month >= 10) yStr += month + '-';
+  else yStr += '0' + month + '-';
+  if (yesterday.getDate() >= 10) yStr += yesterday.getDate();
+  else yStr += '0' + yesterday.getDate();
+  //Put yesterday's date as default into the modal's date field
+  $('#dateToAddDrink').val(yStr);
+
   $('#historicalAddModal').modal('show');
 } //END launchHistoricalModal()
 function whoopsies() {
@@ -307,5 +333,43 @@ function validatePersonalizations() {
   });
 } //END validatePersonalizations()
 function validateHistoricalAdd() {
-  console.log("validateHistoricalAdd() called");
+  let num = parseInt($('#numberOfDrinks').val());
+  let inDate = $('#dateToAddDrink').val();
+  let errMsg = '';
+
+  if (num <= 0) errMsg += 'Having trouble adding that number of drinks to the total\n';
+  if (!isValidGijgoFormat(inDate)) errMsg += 'Something looks amiss with the date\n';
+  let today = new Date();
+  inDate += " 12:00:00";
+  if (getJSDateTime(inDate) > today) errMsg += 'Future dates are not allowed\n';
+  if (errMsg) {
+    alert(errMsg);
+    return false;
+  }
+
+  let args = [num, inDate];
+  jQuery.ajax({
+    type:     'POST',
+    url:      '../../support/sql/consumption_interaction.php',
+    dataType: 'json',
+    data:     {functionname: 'add_historical_drinks', arguments: args},
+    error:    function(a, b, c) {
+                console.log('jQuery.ajax could not execute php file.');
+              },
+    success:  function(obj) {
+                if (!('error' in obj)) {
+                  if (obj.outcome) {
+                    $('#historicalAddModal').modal('hide');
+                    window.location.reload();
+                  }
+                }
+                else {
+                  console.log(obj.error);
+                }
+    },
+  });
 } //END validateHistoricalAdd()
+function isValidGijgoFormat(inStr) {
+  var re = new RegExp('^[2][0][0-9][0-9][\055][0-1][0-9][\055][0-3][0-9]$');
+  return re.test(inStr);
+} //END isValidGijgoFormat()

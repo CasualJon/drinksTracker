@@ -25,7 +25,8 @@
     <meta name="author" content="Jon Cyrus">
 
     <?php include './assets/css/universal_css.html'; ?>
-    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" type="text/css">
 
     <title>Weekly Drinks Tracker</title>
   </head>

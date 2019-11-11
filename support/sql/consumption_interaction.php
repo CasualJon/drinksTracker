@@ -117,6 +117,16 @@
         $stmt->close();
         break;
 
+      case 'add_historical_drinks':
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare('INSERT INTO consumption_log (cl_person, cl_datetime) VALUES (?, ?)');
+        $stmt->bind_param('is', $_SESSION['user_authorized'], $_POST['arguments'][1]);
+        for ($i = 0; $i < $_POST['arguments'][0]; $i++) {
+          $result['outcome'] = $stmt->execute();
+        }
+        $stmt->close();
+        break;
+
       default:
         $result['error'] = "Well, shit.";
         break;
