@@ -1,5 +1,5 @@
 <IfModule mod_setenvif.c>
-  SetEnvIfNoCase User-Agent (sqlmap|wordpress|apachebench|masscan|zgrab|http|go-http-client|python|netsystemsresearch) bad_user_agents
+  SetEnvIfNoCase User-Agent (sqlmap|wordpress|apachebench|masscan|zgrab|http|go-http-client|python|netsystemsresearch|kubectl|curl|ahrefsbot) bad_user_agents
 
   Order Allow,Deny
   Allow from all
