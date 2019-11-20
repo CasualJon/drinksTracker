@@ -7,7 +7,6 @@
 
   //If logged in already, forward to review page
   if (isset($_SESSION['user_authorized'])) {
-    $_SESSION['in elif isset user_authorized'] = true;
     header('location: review.php');
     exit;
   }
