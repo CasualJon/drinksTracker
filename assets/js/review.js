@@ -223,6 +223,10 @@ function drawCurrentWeekBarchart() {
     for (let j = 0; j < weeksDrinks.length; j++) {
       let compDate = getJSDateTime(weeksDrinks[j].cl_datetime);
       if ((d.getDate() + i) === compDate.getDate()) dailyCounts[i]++;
+      else if (d.getMonth() !== compDate.getMonth()) {
+        let tmpDay = 1 + i;
+        if (tmpDay === compDate.getDate()) dailyCounts[i]++;
+      }
       else if ((d.getMonth() === compDate.getMonth()) && ((d.getDate + i) < compDate.getDate())) break;
     }
     if (dailyCounts[i] > highestPerDay) highestPerDay = dailyCounts[i];
