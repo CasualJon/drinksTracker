@@ -223,11 +223,10 @@ function drawCurrentWeekBarchart() {
     for (let j = 0; j < weeksDrinks.length; j++) {
       let compDate = getJSDateTime(weeksDrinks[j].cl_datetime);
       if ((d.getDate() + i) === compDate.getDate()) dailyCounts[i]++;
+      else if ((d.getMonth() === compDate.getMonth()) && ((d.getDate() + i) < compDate.getDate())) break;
       else if (d.getMonth() !== compDate.getMonth()) {
-        let tmpDay = 1 + i;
-        if (tmpDay === compDate.getDate()) dailyCounts[i]++;
+        if (d.getDate() + i === d.getDate() + compDate.getDate()) dailyCounts[i]++;
       }
-      else if ((d.getMonth() === compDate.getMonth()) && ((d.getDate + i) < compDate.getDate())) break;
     }
     if (dailyCounts[i] > highestPerDay) highestPerDay = dailyCounts[i];
   }
@@ -377,3 +376,16 @@ function isValidGijgoFormat(inStr) {
   var re = new RegExp('^[2][0][0-9][0-9][\055][0-1][0-9][\055][0-3][0-9]$');
   return re.test(inStr);
 } //END isValidGijgoFormat()
+function getDaysInMonth(dt) {
+  let year = dt.getFullYear();
+  let leapYear = (year % 100 === 0) ? (year % 400 === 0) : (year % 4 === 0);
+
+  if ((dt.getMonth() + 1) === 2) {
+    if (leapYear) return 29;
+    else return 28;
+  }
+  else if ((dt.getMonth() + 1) % 2 === 0) {
+    return 30;
+  }
+  else return 31;
+}
