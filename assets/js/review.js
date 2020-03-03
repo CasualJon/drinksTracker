@@ -219,19 +219,16 @@ function drawCurrentWeekBarchart() {
   let dailyCounts = new Array(7).fill(0);
   let highestPerDay = 0;
 
+  //Could def do faster by not restarting j at 0, but the counts are so small that speedup is negligable
   for (let i = 0; i < dailyCounts.length; i++) {
     for (let j = 0; j < weeksDrinks.length; j++) {
-      let compDate = getJSDateTime(weeksDrinks[j].cl_datetime);
-      if ((d.getDate() + i) === compDate.getDate()) dailyCounts[i]++;
-      else if ((d.getMonth() === compDate.getMonth()) && ((d.getDate() + i) < compDate.getDate())) break;
-      else if (d.getMonth() !== compDate.getMonth()) {
-        if (d.getDate() + i === d.getDate() + compDate.getDate()) dailyCounts[i]++;
-      }
+      let drinkDate = getJSDateTime(weeksDrinks[j].cl_datetime);
+      let evalDate = addDays(d, i);
+      if (evalDate.getDate() === drinkDate.getDate()) dailyCounts[i]++;
     }
     if (dailyCounts[i] > highestPerDay) highestPerDay = dailyCounts[i];
   }
   if (highestPerDay < 5) highestPerDay = 5;
-
   let weeklyData = google.visualization.arrayToDataTable([
       ['Day', 'Count'],
       ['Fri',  dailyCounts[0]],
@@ -388,4 +385,35 @@ function getDaysInMonth(dt) {
     return 30;
   }
   else return 31;
+}
+function addDays(date, days) {
+  let result = new Date(date);
+  if (result.getDate() + days <= getDaysInMonth(result)) {
+    result.setDate(result.getDate() + days);
+  }
+  else {
+    let day = (result.getDate() + days) - getDaysInMonth(result);
+    let dateStr = "";
+    if (result.getMonth() === 11) {
+      dateStr += (result.getFullYear() + 1);
+      dateStr += "-01-";
+      if (day < 10) dateStr += "0" + day;
+      else dateStr += day;
+      dateStr += " 12:00:00";
+    }
+    else {
+      dateStr += result.getFullYear();
+      dateStr += "-";
+      //Have to add 2 to getMonth becasue it uses 0-11 but new Date takes 1-12
+      if (result.getMonth() + 2 < 10) dateStr += "0" + (result.getMonth() + 2) + "-";
+      else dateStr += (result.getMonth() + 2) + "-";
+      if (day < 10) dateStr += "0" + day;
+      else dateStr += day;
+      dateStr += " 12:00:00";
+    }
+
+    result = getJSDateTime(dateStr);
+  }
+
+  return result;
 }
