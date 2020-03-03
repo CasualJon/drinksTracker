@@ -2,7 +2,7 @@
 Options -Indexes
 
 <IfModule mod_setenvif.c>
-  SetEnvIfNoCase User-Agent (sqlmap|wordpress|apachebench|masscan|zgrab|http|go-http-client|python|research|kubectl|curl|ahrefsbot|nmap|engine|yabrowser|sslyze|aihitbot|okhttp|yandex|nimbostratus|seznam|checkmark|scrapy) bad_user_agents
+  SetEnvIfNoCase User-Agent (sqlmap|wordpress|apachebench|masscan|zgrab|http|go-http-client|python|research|kubectl|curl|ahrefsbot|nmap|engine|yabrowser|sslyze|aihitbot|okhttp|yandex|nimbostratus|seznam|checkmark|scrapy|mj12bot) bad_user_agents
 
   Order Allow,Deny
   Allow from all
