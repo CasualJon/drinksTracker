@@ -220,6 +220,7 @@ function drawCurrentWeekBarchart() {
   let highestPerDay = 0;
 
   //Could def do faster by not restarting j at 0, but the counts are so small that speedup is negligable
+  //However, to account for post-logged days (where logging the 8th on the 10th), let's just force eval the full array
   for (let i = 0; i < dailyCounts.length; i++) {
     for (let j = 0; j < weeksDrinks.length; j++) {
       let drinkDate = getJSDateTime(weeksDrinks[j].cl_datetime);
